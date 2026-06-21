@@ -1,0 +1,183 @@
+[
+  {
+    "id": "vr-sandbox",
+    "category": "Real-Time · VR · Distributed Systems",
+    "year": "2026",
+    "accentColor": "#8b5cf6",
+    "name": "Server-Authoritative Multiplayer VR Sandbox",
+    "problem": "The fundamental problem in multiplayer VR is state authority: when clients own their world, desync and divergence are inevitable. The challenge was building a sandbox where the server owns all terrain, physics, and object state, distributing updates to N Quest headsets at 72Hz without perceptible lag. Server-authoritative design from the ground up — no client-side state mutations.",
+    "impacts": [
+      { "value": "72Hz", "label": "Frame-rate sync" },
+      { "value": "N→N", "label": "Multi-Quest sync" },
+      { "value": "CSV", "label": "Terrain streaming" }
+    ],
+    "architecture": "Built on Unity 2022.3 with Netcode for GameObjects, using a strict server-authoritative model — clients send input intentions, never state mutations. Terrain data streams from CSV frame buffers parsed server-side and distributed via Netcode's NetworkVariable system, ensuring every connected Quest headset renders identical geometry. The authority pattern prevents desync across N clients without expensive reconciliation. Designed as a research-grade collaborative simulation platform — the architecture prioritizes deterministic state replication over cosmetic polish.",
+    "techTags": [
+      "Unity 2022.3",
+      "Netcode for GameObjects",
+      "Meta Quest",
+      "Server-Authoritative Model",
+      "CSV Terrain Streaming",
+      "NetworkVariable Sync"
+    ],
+    "featured": true,
+    "githubUrl": "#"
+  },
+  {
+    "id": "arcanum",
+    "category": "Full-Stack · Backend Systems · Competition Platform",
+    "year": "2026",
+    "accentColor": "#10b981",
+    "name": "Arcanum — AI-Era Puzzle Competition Platform",
+    "problem": "Build a competition platform that handles high-volume concurrent submissions, prevents abuse without blocking legitimate players, and returns semantic feedback fast enough that it feels instant. 10 progressive levels. 10,000+ submissions in the first 10 hours. 90+ concurrent players. The puzzle concept is the product skin — the backend systems are the actual engineering problem.",
+    "impacts": [
+      { "value": "10k+", "label": "Submissions in 10h" },
+      { "value": "90+", "label": "Active players" },
+      { "value": "10", "label": "Progressive levels" }
+    ],
+    "architecture": "React on Vercel with a Flask API on Render backed by Supabase PostgreSQL. All puzzle validation is server-side — no answer state reachable via client inspection. The semantic feedback engine encodes player guesses into dense embeddings and scores cosine similarity against the solution, returning a graduated warmth signal in place of binary feedback. Harder levels intentionally degrade signal resolution. A hint system with 24-hour refresh cycles gates progression without blocking it. Rate limiting and OTP-based account verification held under 10,000+ competitive submissions in the first session — abuse prevention was a design requirement, not an afterthought.",
+    "techTags": [
+      "React",
+      "Flask",
+      "Supabase",
+      "PostgreSQL",
+      "Word Embeddings",
+      "Semantic Similarity",
+      "Rate Limiting",
+      "OTP Auth",
+      "Vercel",
+      "Render"
+    ],
+    "featured": true,
+    "githubUrl": "#",
+    "landing": {
+      "name": "Arcanum",
+      "category": "Full-Stack · Competition Platform",
+      "blurb": "AI-era puzzle competition platform. Server-validated submissions, semantic warmth feedback, abuse protection that held under 10k+ submissions in 10 hours.",
+      "techTags": ["React", "Flask", "Supabase", "Embeddings"],
+      "visual": "rings"
+    }
+  },
+  {
+    "id": "mnemo",
+    "category": "Full-Stack · Applied ML · Accessibility",
+    "year": "2026",
+    "accentColor": "#06b6d4",
+    "name": "Mnemo — Vocabulary Builder for Neurodivergent Learners",
+    "problem": "Vocabulary apps built around alphabetical rote memorization fail ADHD learners — flat lists collapse attention and treat all words as interchangeable. The challenge: design a vocab app where mnemonics carry the cognitive load, sourced from both AI generation and a community submission/voting layer, with per-user progress, saves, and notes that survive long enough to compound into real recall.",
+    "impacts": [
+      { "value": "AI + crowd", "label": "Mnemonic sources" },
+      { "value": "Per-user", "label": "Progress + notes" },
+      { "value": "Voting", "label": "Community quality signal" }
+    ],
+    "architecture": "Designed for ADHD attention patterns first — every screen privileges a single high-salience artifact (the mnemonic) over list density. Mnemonics are generated on demand via an LLM with prompt scaffolding that emphasizes vivid imagery, then surfaced alongside community submissions. A voting layer turns the crowd into the quality signal so weak mnemonics decay without explicit moderation. Per-user progress, saves, and notes are persisted in Postgres with row-level scoping; each word becomes a long-lived object the user can return to, not a flashcard that disappears after a session.",
+    "techTags": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Postgres",
+      "OpenAI API",
+      "Community Voting",
+      "Tailwind"
+    ],
+    "featured": true,
+    "githubUrl": "#",
+    "landing": {
+      "name": "Mnemo",
+      "category": "Accessibility · Applied ML",
+      "blurb": "Vocabulary builder for ADHD learners. Mnemonics carry the load — AI-generated plus a community submission and voting layer. Per-user progress, saves, and notes.",
+      "techTags": ["Next.js", "Postgres", "OpenAI", "Tailwind"],
+      "visual": "tiles"
+    }
+  },
+  {
+    "id": "canvas-rag",
+    "category": "ML · RAG · Audio Systems",
+    "year": "2026",
+    "accentColor": "#ec4899",
+    "name": "Canvas RAG — Conversational Coursework with Voice I/O",
+    "problem": "Canvas LMS scatters lectures, syllabi, readings, and assignments across modules with no unified query layer — students re-read the same material to find one sentence. The build: a conversational RAG layer over a student's entire Canvas catalog with bidirectional voice, so reviewing a course feels like asking a TA, not Ctrl-F across PDFs.",
+    "impacts": [
+      { "value": "Voice", "label": "Bidirectional I/O" },
+      { "value": "Canvas", "label": "Full course corpus" },
+      { "value": "RAGAS", "label": "Retrieval eval" }
+    ],
+    "architecture": "A FastAPI backend pulls coursework from Canvas, encrypts at rest with Fernet, and chunks documents into a ChromaDB vector store keyed per-course and per-user. Retrieval is augmented by GPT OSS for the conversational layer — keeping inference and embeddings out of third-party APIs where coursework privacy matters. Voice input runs through Whisper for transcription; responses are spoken back via TTS so the entire loop is hands-free. Retrieval quality is continuously evaluated using RAGAS metrics (faithfulness, answer relevancy, context precision) so regressions in chunking or prompt strategy are caught before they ship.",
+    "techTags": [
+      "React",
+      "Python",
+      "FastAPI",
+      "ChromaDB",
+      "GPT OSS",
+      "Whisper",
+      "Fernet",
+      "RAGAS"
+    ],
+    "featured": true,
+    "githubUrl": "#",
+    "landing": {
+      "name": "Canvas RAG",
+      "category": "RAG · Audio Systems",
+      "blurb": "Talk to your coursework. A RAG layer over Canvas LMS with bidirectional voice — Whisper in, TTS out, GPT OSS in the middle. RAGAS-evaluated retrieval.",
+      "techTags": ["FastAPI", "ChromaDB", "Whisper", "RAGAS"],
+      "visual": "waveform"
+    }
+  },
+  {
+    "id": "clinical-nlp",
+    "category": "ML · NLP · Clinical Systems",
+    "year": "2026",
+    "accentColor": "#f43f5e",
+    "name": "Clinical Urgency Classification from EHR Notes",
+    "problem": "Emergency departments generate thousands of unstructured clinical notes daily. Triage depends on clinicians reading every note — a bottleneck that delays critical interventions. The task: classify free-text EHR notes into Stable, Deteriorating, or Critical urgency, on a dataset where critical cases represent less than 8% of samples.",
+    "impacts": [
+      { "value": "3-class", "label": "Urgency taxonomy" },
+      { "value": "<8%", "label": "Critical class ratio" },
+      { "value": "F1", "label": "Primary metric" }
+    ],
+    "architecture": "The core challenge was class imbalance — with Critical cases at <8%, accuracy alone is meaningless. The pipeline starts with text preprocessing and TF-IDF feature extraction, then embedding-based representations that capture semantic similarity between symptom descriptions. Classification uses Logistic Regression — chosen deliberately over deep models because interpretability matters in clinical settings and the dataset doesn't justify transformer-scale compute. Evaluation prioritizes F1, precision, and recall per class, with particular attention to recall on Critical where a false negative has real patient cost.",
+    "techTags": [
+      "Python",
+      "scikit-learn",
+      "TF-IDF",
+      "Embeddings",
+      "Logistic Regression",
+      "Imbalanced Classification",
+      "Clinical NLP"
+    ],
+    "featured": true,
+    "githubUrl": "#",
+    "landing": {
+      "name": "Clinical Urgency NLP",
+      "category": "ML · Clinical Systems",
+      "blurb": "Classify free-text EHR notes into Stable, Deteriorating, or Critical. Class imbalance under 8% — F1 and recall on Critical drive the design, not accuracy.",
+      "techTags": ["Python", "scikit-learn", "TF-IDF", "Embeddings"],
+      "visual": "clusters"
+    }
+  },
+  {
+    "id": "puzzle-engine",
+    "category": "ML · Search · Vector Systems",
+    "year": "2026",
+    "accentColor": "#3b82f6",
+    "name": "Puzzle Feedback Engine — Vector Similarity Hint System",
+    "problem": "Traditional puzzle hint systems are binary — right or wrong. They tell you nothing about directionality. The challenge: build a feedback engine that understands how semantically close a player's attempt is to the solution and returns graduated \"warmer / colder\" signals.",
+    "impacts": [
+      { "value": "<50ms", "label": "Query latency" },
+      { "value": "pgvector", "label": "Similarity search" },
+      { "value": "Cosine", "label": "Distance metric" }
+    ],
+    "architecture": "Player inputs are encoded into dense vector embeddings and compared against the solution embedding using cosine similarity via Postgres pgvector. The distance maps to a graduated warmth scale — not binary correct/incorrect but a continuous proximity signal. A milestone-based hint system triggers at semantic distance thresholds. End-to-end runs in under 50ms — indistinguishable from a static lookup to the player.",
+    "techTags": [
+      "Postgres",
+      "pgvector",
+      "Embeddings",
+      "Cosine Similarity",
+      "Node.js",
+      "Supabase",
+      "Semantic Search"
+    ],
+    "featured": false,
+    "githubUrl": "#"
+  }
+]
