@@ -1,114 +1,175 @@
-# Portfolio — Built for motion.
+# Portfolio Site
 
-A cinematic, Apple-style portfolio landing page built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, **GSAP ScrollTrigger**, **Lenis** smooth scrolling, and a scroll-controlled HTML canvas image sequence.
+Personal portfolio for Aravind Santhosh Kumar — built with Next.js 14 (App Router), TypeScript, Tailwind, GSAP, and Lenis. Dark-only, scroll-driven, single-source-of-truth content.
 
-## Quick start
+---
+
+## What this is
+
+A static-feeling marketing site with five routes:
+
+- `/` — landing (hero, feature strip, project highlights, pinned story, CTA)
+- `/work` — work history
+- `/projects` — full project list (driven by `src/data/projects.json`)
+- `/about` — bio, skills, philosophy
+- `/contact` — contact info
+
+Plus `/hero-demo` (an orphan route showcasing the unused scroll-canvas hero) and on-theme `not-found` / `error` pages.
+
+---
+
+## Tech stack
+
+| Layer        | Choice                                      |
+| ------------ | ------------------------------------------- |
+| Framework    | Next.js 14.2 (App Router)                   |
+| Language     | TypeScript 5 (strict)                       |
+| Styling      | Tailwind 3.4, dark-only, `ink-950` base     |
+| Animation    | GSAP 3.12 + ScrollTrigger, Framer Motion 12 |
+| Smooth scroll| Lenis 1.0 (bridged to GSAP)                 |
+| Icons        | lucide-react                                |
+
+---
+
+## Installation
+
+**Prerequisites:** Node 18.17+ (Node 20 recommended), npm.
 
 ```bash
-# 1. install
+git clone <repo-url> portfolio-site
+cd portfolio-site
 npm install
-
-# 2. run dev server
-npm run dev
-
-# 3. open
-# http://localhost:3000
 ```
 
-Other scripts:
+### Environment variables
+
+Create a `.env.local` at the project root:
 
 ```bash
-npm run build        # production build
-npm run start        # serve production build
-npm run typecheck    # tsc --noEmit
-npm run lint         # next lint
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-## What you get
+Used by `src/app/sitemap.ts` and `src/app/robots.ts`. In production, set this to the deployed URL (e.g. `https://your-domain.com`).
 
-- Cinematic hero with **scroll-controlled canvas image sequence**
-- Smooth scrolling via **Lenis**, bridged to **GSAP ScrollTrigger**
-- Pinned story section with crossfading text panels
-- Feature cards with reveal-on-scroll
-- Final CTA with hover-animated button
-- Subtle animated navbar with backdrop blur on scroll
-- Top-of-page scroll progress bar
-- Sub-pages: `/work`, `/about`, `/contact`
-- Respects `prefers-reduced-motion` (static fallback, no scrub)
-- WebP-first, DPR-clamped canvas, no React re-renders during scroll
+---
 
-## Project structure
+## Running it
 
-```
-src/
-  app/
-    layout.tsx              # Root layout: providers, navbar, progress bar
-    page.tsx                # Landing page composition
-    globals.css             # Tailwind layers + Lenis helpers
-    work/page.tsx           # /work
-    about/page.tsx          # /about
-    contact/page.tsx        # /contact
-  components/
-    SmoothScrollProvider.tsx # Lenis init + GSAP bridge
-    Navbar.tsx
-    ScrollProgress.tsx
-    ScrollImageSequence.tsx  # The reusable canvas scrub component
-    HeroSection.tsx
-    FeatureSection.tsx
-    PinnedStorySection.tsx
-    CTASection.tsx
-  lib/
-    gsap.ts                  # Single ScrollTrigger registration
-    imageSequence.ts         # Path builder, preloader, cover-draw helper
-
-public/
-  frames/
-    README.md                # How to add frames
-    frame_0001.webp          # <-- you add these
-    ...
+```bash
+npm run dev        # start dev server on http://localhost:3000
+npm run build      # production build
+npm run start      # serve the production build
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
 ```
 
-## Adding your frame sequence
+---
 
-See `public/frames/README.md` for the full export pipeline. TL;DR:
+## Project layout
 
-1. Export your animation as a PNG sequence.
-2. Convert to WebP (`cwebp -q 80 ...` or `ffmpeg -c:v libwebp -quality 80 ...`).
-3. Name them `frame_0001.webp ... frame_NNNN.webp`.
-4. Drop them into `/public/frames/`.
-5. Update `frameCount` in `src/components/HeroSection.tsx` if it&rsquo;s not 120.
-
-If frames are missing, the canvas gracefully falls back to a dark gradient — the rest of the page still works.
-
-## Customizing the hero scrub
-
-`HeroSection.tsx` configures the sequence:
-
-```tsx
-<ScrollImageSequence
-  frameCount={120}        // how many frames you have
-  imagePath="/frames"     // folder under /public
-  fileExtension="webp"    // "webp" | "png" | "jpg" | ...
-  startFrame={1}          // first frame index (1 → frame_0001)
-  filePrefix="frame_"     // filename prefix before the padded index
-  pad={4}                 // zero-pad width (4 → 0001)
-  scrollLength="+=350%"   // scrub distance — bigger = longer pin
-/>
+```
+portfolio-site/
+├── public/
+│   ├── ask-port.png             # landing hero portrait
+│   └── frames/                  # WebP frames for scroll-canvas hero (see README inside)
+│
+├── src/
+│   ├── app/                     # Next.js App Router
+│   │   ├── layout.tsx           # root layout, fonts, metadata
+│   │   ├── page.tsx             # landing page
+│   │   ├── globals.css          # tailwind base + global styles
+│   │   ├── about/page.tsx
+│   │   ├── contact/page.tsx
+│   │   ├── projects/page.tsx
+│   │   ├── work/page.tsx
+│   │   ├── hero-demo/page.tsx   # orphan demo route
+│   │   ├── not-found.tsx        # 404 page
+│   │   ├── error.tsx            # error boundary
+│   │   ├── sitemap.ts           # generated /sitemap.xml
+│   │   └── robots.ts            # generated /robots.txt
+│   │
+│   ├── components/
+│   │   ├── Navbar.tsx
+│   │   ├── HeroSection.tsx              # scroll-canvas hero (used on /hero-demo)
+│   │   ├── FeatureSection.tsx
+│   │   ├── HighlightProjectsSection.tsx # landing highlights grid (1×4 / 2×2 / 3×1)
+│   │   ├── ProjectVisuals.tsx           # rings / tiles / waveform / clusters
+│   │   ├── PinnedStorySection.tsx
+│   │   ├── CTASection.tsx
+│   │   ├── ScrollImageSequence.tsx      # canvas-driven frame player
+│   │   ├── ScrollProgress.tsx
+│   │   ├── SmoothScrollProvider.tsx     # Lenis ↔ GSAP bridge
+│   │   └── ui/
+│   │       ├── minimalist-hero.tsx      # landing hero (Framer Motion)
+│   │       ├── minimalist-hero.demo.tsx # wires portrait + copy
+│   │       └── brand-icons.tsx
+│   │
+│   ├── data/
+│   │   ├── projects.json        # SINGLE SOURCE OF TRUTH for projects
+│   │   └── content.ts           # PROFILE, EXPERIENCES, SKILLS, NAV, FOOTER + derives PROJECTS/HIGHLIGHTS
+│   │
+│   └── lib/
+│       ├── gsap.ts              # GSAP + ScrollTrigger registration
+│       ├── imageSequence.ts     # frame-loading helpers
+│       └── utils.ts             # clsx/tailwind-merge `cn`
+│
+├── tailwind.config.ts
+├── next.config.mjs
+├── tsconfig.json
+└── package.json
 ```
 
-Tweak `scrollLength` to control how much scrolling the sequence consumes.
+### Where what lives
 
-## Accessibility
+| Want to change…             | Edit                                                                 |
+| --------------------------- | -------------------------------------------------------------------- |
+| Project list                | `src/data/projects.json`                                             |
+| Bio, skills, work history   | `src/data/content.ts`                                                |
+| Landing hero copy / image   | `src/components/ui/minimalist-hero.demo.tsx` + `public/ask-port.png` |
+| Nav / footer links          | `src/data/content.ts` (`NAV_LINKS`, `FOOTER_LINKS`)                  |
+| Global colors / fonts       | `tailwind.config.ts`, `src/app/globals.css`, `src/app/layout.tsx`    |
+| Site URL (sitemap/robots)   | `NEXT_PUBLIC_SITE_URL` in `.env.local`                               |
 
-- All decorative canvases are `aria-hidden`.
-- Reduced motion: scrub is disabled, a single static frame is shown.
-- Keyboard scroll continues to work — Lenis virtualizes wheel/touch, not focus.
+---
 
-## Tech versions
+## Adding a project
 
-- Next.js 14 (App Router)
-- React 18
-- TypeScript 5
-- Tailwind CSS 3
-- GSAP 3.12 + ScrollTrigger
-- Lenis 1.0
+Edit `src/data/projects.json`. JSON order = render order on `/projects` AND on the landing highlights grid.
+
+```json
+{
+  "id": "my-project",
+  "category": "Systems",
+  "year": "2025",
+  "accentColor": "#a3e635",
+  "name": "My Project",
+  "problem": "What it solves.",
+  "impacts": ["Outcome 1", "Outcome 2"],
+  "architecture": "Short architecture note.",
+  "techTags": ["Go", "Postgres"],
+  "featured": true,
+  "githubUrl": "https://github.com/...",
+
+  "landing": {
+    "name": "My Project",
+    "category": "Systems",
+    "blurb": "One-line hook for the landing card.",
+    "techTags": ["Go", "Postgres"],
+    "visual": "rings"
+  }
+}
+```
+
+- `landing` is **optional**. Include it to surface the project on the landing page.
+- `visual` must be one of `"rings" | "tiles" | "waveform" | "clusters"` (defined in `src/components/ProjectVisuals.tsx`).
+- The landing grid shows up to 4 items on small screens and up to 3 on `lg+`. Items past index 2 get `lg:hidden` automatically — see `src/components/HighlightProjectsSection.tsx`.
+
+---
+
+## Notes / known gaps
+
+- `metadataBase` in `src/app/layout.tsx` is hardcoded to `https://example.com` — should read `NEXT_PUBLIC_SITE_URL`.
+- `PROFILE.resume` in `content.ts` is `#` — no real resume linked yet.
+- Most `githubUrl` fields in `projects.json` are `#` placeholders.
+- `public/frames/` is empty (only its own README). The scroll-canvas hero falls back to a gradient — fine, since it's not on the landing path.
+- No favicon, no OG image, no contact form backend, no tests, no CI.
