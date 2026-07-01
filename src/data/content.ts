@@ -26,6 +26,7 @@ export interface Project {
   techTags: string[];
   featured: boolean;
   githubUrl: string;
+  liveUrl?: string;
   accentColor: string;
 }
 
@@ -77,6 +78,7 @@ export interface HighlightProject {
   accentColor: string;
   href: string;
   githubUrl: string;
+  liveUrl?: string;
   visual: HighlightVisual;
 }
 
@@ -99,7 +101,6 @@ export const PROFILE = {
   location: "Boston, MA",
   github: "https://github.com/ask187",
   linkedin: "https://www.linkedin.com/in/aravindsk187/",
-  resume: "#",
 };
 
 export const NAV_LINKS: NavLink[] = [
@@ -137,6 +138,7 @@ export const HIGHLIGHT_PROJECTS: HighlightProject[] = PROJECTS_SOURCE
     accentColor: p.accentColor,
     href: `/projects#${p.id}`,
     githubUrl: p.githubUrl,
+    liveUrl: p.liveUrl,
     visual: p.landing.visual,
   }));
 
@@ -303,5 +305,4 @@ export const FOOTER_LINKS: FooterLink[] = [
   { label: "Email", href: "mailto:lnu.arav@northeastern.edu" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/aravindsk187/" },
   { label: "GitHub", href: "https://github.com/ask187" },
-  { label: "Resume", href: "#" },
 ];

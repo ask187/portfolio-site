@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   title: "Aravind Santhosh Kumar — Systems Engineer",
   description:
     "Systems engineer building distributed real-time, ML, and backend infrastructure. MS Computer Science, Northeastern.",
-  metadataBase: new URL("https://example.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://aravindsk.dev",
+  ),
   openGraph: {
     title: "Aravind Santhosh Kumar — Systems Engineer",
     description:

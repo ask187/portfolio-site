@@ -310,7 +310,8 @@ export default function HighlightProjectsSection() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {HIGHLIGHT_PROJECTS.map((p, idx) => {
-            const hasGithub = p.githubUrl && p.githubUrl !== "#";
+            const hasGithub = Boolean(p.githubUrl && p.githubUrl.startsWith("http"));
+            const hasLive = Boolean(p.liveUrl && p.liveUrl.startsWith("http"));
             const hideOnLarge = idx >= 3;
             return (
               <article
@@ -342,43 +343,6 @@ export default function HighlightProjectsSection() {
                         "linear-gradient(90deg, transparent, var(--accent), transparent)",
                     }}
                   />
-
-                  {/* Hover overlay — buttons */}
-                  <div
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink-950/75 px-6 opacity-0 backdrop-blur-md transition-opacity duration-300 ease-apple group-hover:opacity-100 group-focus-within:opacity-100"
-                  >
-                    <Link
-                      href={p.href}
-                      className="inline-flex w-full max-w-[200px] items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] transition-all duration-300 ease-apple hover:translate-y-[-1px]"
-                      style={{
-                        background: "var(--accent)",
-                        color: "#0a0b10",
-                        boxShadow:
-                          "0 12px 30px -8px color-mix(in srgb, var(--accent) 60%, transparent)",
-                      }}
-                    >
-                      View project
-                      <span aria-hidden>→</span>
-                    </Link>
-                    {hasGithub ? (
-                      <a
-                        href={p.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex w-full max-w-[200px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white backdrop-blur transition-all duration-300 ease-apple hover:border-white/40 hover:bg-white/10"
-                      >
-                        GitHub
-                        <span aria-hidden>↗</span>
-                      </a>
-                    ) : (
-                      <span
-                        title="GitHub link coming soon"
-                        className="inline-flex w-full max-w-[200px] cursor-not-allowed items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white/40"
-                      >
-                        GitHub · soon
-                      </span>
-                    )}
-                  </div>
                 </div>
 
                 {/* Body */}
@@ -410,6 +374,51 @@ export default function HighlightProjectsSection() {
                     ))}
                   </div>
                 </div>
+
+                {/* Stretched invisible link — whole card navigates to the project detail */}
+                <Link
+                  href={p.href}
+                  aria-label={`Read about ${p.name}`}
+                  className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]"
+                >
+                  <span className="sr-only">Read about {p.name}</span>
+                </Link>
+
+                {/* Hover overlay — external buttons, sits above the stretched link */}
+                {(hasLive || hasGithub) && (
+                  <div
+                    className="pointer-events-none absolute inset-x-0 top-0 z-10 flex h-[220px] flex-col items-center justify-center gap-3 bg-ink-950/75 px-6 opacity-0 backdrop-blur-md transition-opacity duration-300 ease-apple group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100"
+                  >
+                    {hasLive && (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-full max-w-[200px] items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] transition-all duration-300 ease-apple hover:translate-y-[-1px]"
+                        style={{
+                          background: "var(--accent)",
+                          color: "#0a0b10",
+                          boxShadow:
+                            "0 12px 30px -8px color-mix(in srgb, var(--accent) 60%, transparent)",
+                        }}
+                      >
+                        Visit project
+                        <span aria-hidden>↗</span>
+                      </a>
+                    )}
+                    {hasGithub && (
+                      <a
+                        href={p.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-full max-w-[200px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white backdrop-blur transition-all duration-300 ease-apple hover:border-white/40 hover:bg-white/10"
+                      >
+                        GitHub
+                        <span aria-hidden>↗</span>
+                      </a>
+                    )}
+                  </div>
+                )}
               </article>
             );
           })}

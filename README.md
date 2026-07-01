@@ -1,6 +1,6 @@
 # Portfolio Site
 
-Personal portfolio for Aravind Santhosh Kumar — built with Next.js 14 (App Router), TypeScript, Tailwind, GSAP, and Lenis. Dark-only, scroll-driven, single-source-of-truth content.
+Personal portfolio - built with Next.js 14 (App Router), TypeScript, Tailwind, GSAP, and Lenis. Dark-only, scroll-driven, single-source-of-truth content.
 
 ---
 
@@ -35,11 +35,6 @@ Plus `/hero-demo` (an orphan route showcasing the unused scroll-canvas hero) and
 
 **Prerequisites:** Node 18.17+ (Node 20 recommended), npm.
 
-```bash
-git clone <repo-url> portfolio-site
-cd portfolio-site
-npm install
-```
 
 ### Environment variables
 
@@ -49,7 +44,7 @@ Create a `.env.local` at the project root:
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Used by `src/app/sitemap.ts` and `src/app/robots.ts`. In production, set this to the deployed URL (e.g. `https://your-domain.com`).
+Used by `src/app/sitemap.ts`, `src/app/robots.ts`, and `metadataBase` in `src/app/layout.tsx`. Defaults to `https://aravindsk.dev` in production if unset.
 
 ---
 
@@ -149,6 +144,7 @@ Edit `src/data/projects.json`. JSON order = render order on `/projects` AND on t
   "techTags": ["Go", "Postgres"],
   "featured": true,
   "githubUrl": "https://github.com/...",
+  "liveUrl": "https://myproject.com",
 
   "landing": {
     "name": "My Project",
@@ -162,14 +158,14 @@ Edit `src/data/projects.json`. JSON order = render order on `/projects` AND on t
 
 - `landing` is **optional**. Include it to surface the project on the landing page.
 - `visual` must be one of `"rings" | "tiles" | "waveform" | "clusters"` (defined in `src/components/ProjectVisuals.tsx`).
+- `liveUrl` and `githubUrl` are **optional-ish**: buttons only render when the value starts with `http`. Leave as `""` or `"#"` to hide the button on both the landing card hover overlay and the `/projects` row.
+- On the landing page, the entire highlight card is a link to `/projects#{id}`. The Visit / GitHub buttons appear on hover.
 - The landing grid shows up to 4 items on small screens and up to 3 on `lg+`. Items past index 2 get `lg:hidden` automatically — see `src/components/HighlightProjectsSection.tsx`.
 
 ---
 
 ## Notes / known gaps
 
-- `metadataBase` in `src/app/layout.tsx` is hardcoded to `https://example.com` — should read `NEXT_PUBLIC_SITE_URL`.
-- `PROFILE.resume` in `content.ts` is `#` — no real resume linked yet.
 - Most `githubUrl` fields in `projects.json` are `#` placeholders.
 - `public/frames/` is empty (only its own README). The scroll-canvas hero falls back to a gradient — fine, since it's not on the landing path.
 - No favicon, no OG image, no contact form backend, no tests, no CI.

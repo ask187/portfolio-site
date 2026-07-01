@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Mail, FileText } from "lucide-react";
+import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/brand-icons";
 import { MinimalistHero } from "@/components/ui/minimalist-hero";
 import { PROFILE } from "@/data/content";
@@ -18,7 +18,6 @@ const MinimalistHeroDemo = () => {
     { icon: GithubIcon, href: PROFILE.github },
     { icon: LinkedinIcon, href: PROFILE.linkedin },
     { icon: Mail, href: `mailto:${PROFILE.email}` },
-    { icon: FileText, href: PROFILE.resume },
   ];
 
   return (

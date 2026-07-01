@@ -28,6 +28,8 @@ export default function ProjectsPage() {
         <div className="mt-20 divide-y divide-white/5 border-t border-white/5">
           {PROJECTS.map((p) => {
             const Visual = getProjectVisual(p.id);
+            const hasGithub = Boolean(p.githubUrl && p.githubUrl.startsWith("http"));
+            const hasLive = Boolean(p.liveUrl && p.liveUrl.startsWith("http"));
             return (
             <article
               key={p.id}
@@ -97,36 +99,52 @@ export default function ProjectsPage() {
                   ))}
                 </ul>
 
-                <div className="mt-6 flex justify-end">
-                  {p.githubUrl.startsWith("http") ? (
-                    <a
-                      href={p.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${p.name} on GitHub`}
-                      title={`${p.name} on GitHub`}
-                      className="group/gh relative inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink-950 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-white/65 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[color:var(--accent)]"
-                    >
-                      <GithubIcon className="h-3.5 w-3.5" />
-                      <span>GitHub</span>
-                      <span
-                        aria-hidden
-                        className="transition-transform duration-300 group-hover/gh:translate-x-0.5"
+                {(hasLive || hasGithub) && (
+                  <div className="mt-6 flex flex-wrap justify-end gap-2">
+                    {hasLive && (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${p.name}`}
+                        title={`Visit ${p.name}`}
+                        className="group/live inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-ink-950 transition-all duration-300 hover:-translate-y-0.5"
+                        style={{
+                          background: "var(--accent)",
+                          boxShadow:
+                            "0 10px 24px -10px color-mix(in srgb, var(--accent) 55%, transparent)",
+                        }}
                       >
-                        ↗
-                      </span>
-                    </a>
-                  ) : (
-                    <span
-                      aria-label="GitHub link coming soon"
-                      title="GitHub link coming soon"
-                      className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-white/5 bg-ink-950 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-white/25"
-                    >
-                      <GithubIcon className="h-3.5 w-3.5" />
-                      <span>GitHub · soon</span>
-                    </span>
-                  )}
-                </div>
+                        <span>Visit project</span>
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover/live:translate-x-0.5"
+                        >
+                          ↗
+                        </span>
+                      </a>
+                    )}
+                    {hasGithub && (
+                      <a
+                        href={p.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${p.name} on GitHub`}
+                        title={`${p.name} on GitHub`}
+                        className="group/gh relative inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink-950 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.14em] text-white/65 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[color:var(--accent)]"
+                      >
+                        <GithubIcon className="h-3.5 w-3.5" />
+                        <span>GitHub</span>
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover/gh:translate-x-0.5"
+                        >
+                          ↗
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </article>
             );
